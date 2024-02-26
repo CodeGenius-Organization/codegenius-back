@@ -9,10 +9,10 @@ public interface HeartService {
     /**
      * Creates a new heart entry for a user.
      *
-     * @param heartDTO The heart-related information to be created.
+     * @param fkUser The heart-related information to be created.
      * @return The complete heart-related information for the newly created heart.
      */
-    DadosCoracaoUserCompleto createHeart(DadosCoracaoUser heartDTO);
+    DadosCoracaoUserCompleto createHeart(UUID fkUser);
 
     /**
      * Retrieves simplified heart-related information for a user based on their UUID.

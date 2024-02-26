@@ -36,7 +36,7 @@ public class HeartServiceImpl implements HeartService{
     /**
      * Creates a new heart entry for a user.
      *
-     * @param heartDTO                                    The heart-related information to be created.
+     * @param fkUser                                    The heart-related information to be created.
      * @return                                            The complete heart-related information for the newly created game.
      * @throws GlobalExceptionHandler.BadRequestException If the user's UUID is already associated with another game.
      *
@@ -45,17 +45,19 @@ public class HeartServiceImpl implements HeartService{
      */
     @Transactional
     @Override
-    public DadosCoracaoUserCompleto createHeart(DadosCoracaoUser heartDTO) {
-        UserModel userModel = userRepository.findById(heartDTO.getFkUser())
+    public DadosCoracaoUserCompleto createHeart(UUID fkUser) {
+        UserModel userModel = userRepository.findById(fkUser)
                 .orElseThrow();
 
-        HeartModel heartModel = convertToEntity(heartDTO);
+        HeartModel heartModel = new HeartModel();
 
         if (isFkUserAlreadyUsed(userModel)) {
             throw new GlobalExceptionHandler.BadRequestException("User already used");
         }
 
         heartModel.setHearts(3);
+        heartModel.setFkUser(userModel);
+        heartModel.setLastUpdate(LocalDateTime.now());
 
         HeartModel createdHeart = heartRepository.save(heartModel);
         return convertToDTOCompleto(createdHeart);

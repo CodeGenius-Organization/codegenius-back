@@ -30,6 +30,7 @@
     @CrossOrigin(origins = {"http://localhost:3000","http://localhost:8181"})
     public class UserController {
         private final UserService userService;
+        private final HeartController heartController;
 
         /**
          * Saves user registration data and returns a response with saved user details.
@@ -49,6 +50,7 @@
             DadosCadastroUser savedUser = userService.saveUser(userDTO, userComp);
 
             var uri = uriBuilder.path("/user/{id}").buildAndExpand(userComp.getId()).toUri();
+            heartController.createHeart(userComp.getId());
             return ResponseEntity.created(uri).body(savedUser);
         }
 

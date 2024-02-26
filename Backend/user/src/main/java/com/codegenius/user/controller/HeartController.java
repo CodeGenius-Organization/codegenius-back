@@ -4,17 +4,14 @@ import com.codegenius.user.domain.dto.DadosCoracaoUser;
 import com.codegenius.user.domain.dto.DadosCoracaoUserCompleto;
 import com.codegenius.user.domain.service.HeartService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.UUID;
 
@@ -40,10 +37,8 @@ public class HeartController {
     /**
      * Endpoint to create a new heart.
      *
-     * @param heartDTO     The heart data to be created.
-     * @param uriBuilder   A URI builder for the new resource.
-     * @return             ResponseEntity with the created heart and status 201 Created.
-     *
+     * @param fkUser The heart data to be created.
+     * @return ResponseEntity with the created heart and status 201 Created.
      * @author hidek
      * @since 2023-10-08
      */
@@ -51,12 +46,10 @@ public class HeartController {
     @Operation(summary = "Create a new heart", description = "Endpoint to create a new heart with provided details.")
     @ApiResponse(responseCode = "201", description = "Heart created", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DadosCoracaoUserCompleto.class)))
     public ResponseEntity<DadosCoracaoUserCompleto> createHeart(
-            @RequestBody @Valid DadosCoracaoUser heartDTO,
-            UriComponentsBuilder uriBuilder) {
-        DadosCoracaoUserCompleto createdHeart = heartService.createHeart(heartDTO);
+            UUID fkUser) {
+        DadosCoracaoUserCompleto createdHeart = heartService.createHeart(fkUser);
 
-        var uri = uriBuilder.path("/hearts/{id}").buildAndExpand(createdHeart.getId()).toUri();
-        return ResponseEntity.created(uri).body(createdHeart);
+        return ResponseEntity.status(201).body(createdHeart);
     }
 
     /**

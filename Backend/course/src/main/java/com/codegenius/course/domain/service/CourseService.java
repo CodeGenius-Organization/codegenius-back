@@ -2,6 +2,7 @@ package com.codegenius.course.domain.service;
 
 import com.codegenius.course.domain.dto.CourseCreationDTO;
 import com.codegenius.course.domain.dto.CourseCsvDTO;
+import com.codegenius.course.domain.dto.CourseDetailDTO;
 import com.codegenius.course.domain.dto.CourseMapper;
 import com.codegenius.course.domain.model.CategoryModel;
 import com.codegenius.course.domain.model.CourseModel;
@@ -46,9 +47,9 @@ public class CourseService {
         return this.courseRepository.findByLanguages_Id(language.getId());
     }
 
-    public List<CourseModel> getCoursesByCategory(String categoryName) {
-//        CategoryModel category = categoryService.findCategoryByName(categoryName);
-        return this.courseRepository.findByCategories_Category(categoryName);
+    public List<CourseModel> getCoursesByCategory(String categoryName, String ordering, Integer position) {
+         return this.courseRepository.findByCategories_Category_OrderBy(categoryName, ordering, position);
+
     }
 
     public List<CourseModel> getAvailableCourses() {
@@ -120,8 +121,12 @@ public class CourseService {
         courseRepository.updateCourseImage(courseId, image);
     }
 
-    public CourseModel getCourseById(UUID courseId) {
-        return courseRepository.findById(courseId).get();
+    public CourseDetailDTO getCourseById(UUID courseId) {
+        Optional<CourseModel> course = courseRepository.findById(courseId);
+        if(course.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return new CourseDetailDTO(course.get());
     }
 
     public byte[] getCourseImageById(UUID courseId) {

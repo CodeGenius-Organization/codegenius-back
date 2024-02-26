@@ -36,10 +36,12 @@ public class CourseModel {
 
     @Column(name = "course_description", length = 100, nullable = false)
     @NotBlank
+    @JsonIgnore
     private String courseDescription;
 
     @Column(name = "content_description", length = 100, nullable = false)
     @NotBlank
+    @JsonIgnore
     private String contentDescription;
 
     @JsonIgnore
@@ -73,6 +75,7 @@ public class CourseModel {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JsonIgnore
     private Set<CourseModuleModel> modules = new HashSet<>();
 
     public CourseModel(String title, String courseDescription, String contentDescription, Boolean available) {

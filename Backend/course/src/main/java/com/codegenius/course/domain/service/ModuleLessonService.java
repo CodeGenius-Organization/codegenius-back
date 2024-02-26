@@ -65,6 +65,12 @@ public class ModuleLessonService {
         return moduleLessonRepository.save(newModuleLesson);
     }
 
+    public List<ModuleLessonModel> getAllModuleLesson() {
+        List<ModuleLessonModel> moduleLesson = moduleLessonRepository.findAll();
+
+        return moduleLesson;
+    }
+
     public boolean deleteModuleLesson(UUID lessonId) {
         boolean lessonExists = moduleLessonRepository.existsById(lessonId);
 

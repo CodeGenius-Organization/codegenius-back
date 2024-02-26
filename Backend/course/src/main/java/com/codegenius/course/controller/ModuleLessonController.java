@@ -59,6 +59,13 @@ public class ModuleLessonController {
         return ResponseEntity.status(200).body(moduleLessons);
     }
 
+    @GetMapping("/module/lessons")
+    public ResponseEntity<List<ModuleLessonModel>> getModuleLesson() {
+        List<ModuleLessonModel> moduleLessons = moduleLessonService.getAllModuleLesson();
+
+        return moduleLessons.isEmpty() ? ResponseEntity.status(204).build() : ResponseEntity.status(200).body(moduleLessons);
+    }
+
     @PutMapping("/{moduleId}/lessons")
     public ResponseEntity<List<ModuleLessonUpdateDTO>> updateModuleLessons(@RequestBody List<ModuleLessonUpdateDTO> moduleLessonList, @PathVariable UUID moduleId) {
         List<ModuleLessonUpdateDTO> newModuleLessonList = moduleLessonService.updateModuleLessons(moduleLessonList);
