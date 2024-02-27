@@ -1,9 +1,6 @@
 package com.codegenius.game.controller;
 
-import com.codegenius.game.domain.dto.DadosQuestaoTxtDTO;
-import com.codegenius.game.domain.dto.DadosQuestoes;
-import com.codegenius.game.domain.dto.DadosQuestoesCompleto;
-import com.codegenius.game.domain.dto.DadosQuestoesUpdate;
+import com.codegenius.game.domain.dto.*;
 import com.codegenius.game.domain.utils.Fila;
 import com.codegenius.game.domain.service.QuestionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -95,6 +92,14 @@ public class QuestionController {
     @GetMapping("/baixar/txt/{nomeArq}")
     public ResponseEntity<List<DadosQuestaoTxtDTO>> baixarTxt(@PathVariable String nomeArq) {
         List<DadosQuestaoTxtDTO> lista = questionService.baixarTxt(nomeArq);
+        return lista.isEmpty()
+                ? ResponseEntity.status(204).build()
+                : ResponseEntity.status(200).body(lista);
+    }
+
+    @GetMapping("/exercicios/{lessonContent}")
+    public ResponseEntity<List<ListaQuestao>> listQuestion(@PathVariable UUID lessonContent) {
+        List<ListaQuestao> lista = questionService.listaQuestaos(lessonContent);
         return lista.isEmpty()
                 ? ResponseEntity.status(204).build()
                 : ResponseEntity.status(200).body(lista);

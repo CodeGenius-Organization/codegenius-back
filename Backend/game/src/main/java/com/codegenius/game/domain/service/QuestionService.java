@@ -2,17 +2,16 @@ package com.codegenius.game.domain.service;
 
 import com.codegenius.game.domain.dto.*;
 import com.codegenius.game.domain.model.QuestionModel;
+import com.codegenius.game.domain.model.ResponseModel;
 import com.codegenius.game.domain.repository.QuestionRepository;
+import com.codegenius.game.domain.repository.ResponseRepository;
 import com.codegenius.game.domain.utils.Fila;
 import com.codegenius.game.domain.utils.GerenciadorArquivoTxt;
 import com.codegenius.game.infra.exception.GlobalExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Service class for managing question-related game data.
@@ -23,12 +22,13 @@ import java.util.UUID;
 @Service
 public class QuestionService {
     private final QuestionRepository questionRepository;
-
+    private final ResponseRepository responseRepository;
     private final ResponseService responseService;
 
     @Autowired
-    public QuestionService(QuestionRepository questionRepository, ResponseService responseService) {
+    public QuestionService(QuestionRepository questionRepository, ResponseRepository responseRepository, ResponseService responseService) {
         this.questionRepository = questionRepository;
+        this.responseRepository = responseRepository;
         this.responseService = responseService;
     }
 
@@ -123,6 +123,63 @@ public class QuestionService {
 
         return data;
     }
+
+    public List<ListaQuestao> listaQuestaos(UUID id) {
+        List<QuestionModel> questoes = questionRepository.findByLeassonContent(id);
+        if (questoes.isEmpty()) {
+            throw new GlobalExceptionHandler.NotFoundException("Questions not found with lesson content id: " + id);
+        }
+
+        List<QuestionModel> questoesAleatorias = selecionarQuestoesAleatorias(questoes, 5);
+
+        List<ListaQuestao> listaDeQuestoes = new ArrayList<>();
+        Random random = new Random();
+        for (QuestionModel question : questoesAleatorias) {
+            List<ResponseModel> respostas = responseRepository.findAllByFkQuestion(question);
+            List<ResponseModel> respostasCorretas = new ArrayList<>();
+            List<ResponseModel> respostasIncorretas = new ArrayList<>();
+            for (ResponseModel resposta : respostas) {
+                if (resposta.getCorrect()) {
+                    respostasCorretas.add(resposta);
+                } else {
+                    respostasIncorretas.add(resposta);
+                }
+            }
+
+            if (respostasCorretas.isEmpty() || respostasIncorretas.size() < 4) {
+                throw new GlobalExceptionHandler.NotFoundException("Insufficient quantity of correct or incorrect responses for question with ID: " + question.getId());
+            }
+
+            ResponseModel respostaCorreta = respostasCorretas.get(random.nextInt(respostasCorretas.size()));
+
+            Collections.shuffle(respostasIncorretas);
+            List<ResponseModel> respostasSelecionadas = new ArrayList<>(respostasIncorretas.subList(0, 4));
+            respostasSelecionadas.add(respostaCorreta);
+
+            Collections.shuffle(respostasSelecionadas);
+
+            ListaQuestao listaQuestao = convertToListaQuestao(question, respostasSelecionadas);
+            listaDeQuestoes.add(listaQuestao);
+        }
+
+        return listaDeQuestoes;
+    }
+
+    private List<QuestionModel> selecionarQuestoesAleatorias(List<QuestionModel> questoes, int quantidade) {
+        List<QuestionModel> questoesAleatorias = new ArrayList<>(questoes);
+        Collections.shuffle(questoesAleatorias);
+        return questoesAleatorias.subList(0, Math.min(quantidade, questoesAleatorias.size()));
+    }
+
+    private ListaQuestao convertToListaQuestao(QuestionModel questionModel, List<ResponseModel> responseModels) {
+        List<Resposta> listaDeRespostas = new ArrayList<>();
+        for (ResponseModel responseModel : responseModels) {
+            Resposta resposta = new Resposta(responseModel.getAnswer(), responseModel.getCorrect(), responseModel.getExplanation(), responseModel.getFkQuestion().getId());
+            listaDeRespostas.add(resposta);
+        }
+        return new ListaQuestao(questionModel.getId(), questionModel.getQuestionType(), questionModel.getStatement(), questionModel.getTestQuestion(), questionModel.getLeassonContent(), listaDeRespostas);
+    }
+
     private List<DadosQuestaoTxtDTO> convertToQuestaoModelListTxt(List<QuestionModel> questoes) {
         List<DadosQuestaoTxtDTO> questao = new ArrayList<>();
 
