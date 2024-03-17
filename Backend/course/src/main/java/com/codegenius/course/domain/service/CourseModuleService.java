@@ -8,7 +8,9 @@ import com.codegenius.course.domain.repository.CourseModuleRepository;
 import com.codegenius.course.domain.repository.CourseRepository;
 import com.codegenius.course.utils.ListaObj;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -81,5 +83,9 @@ public class CourseModuleService {
         }
 
         this.courseModuleRepository.delete(courseModule.get());
+    }
+
+    public CourseModuleModel getCourseModuleById(UUID courseModuleId) {
+        return this.courseModuleRepository.findById(courseModuleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Course module not found"));
     }
 }

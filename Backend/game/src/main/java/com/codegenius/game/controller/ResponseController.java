@@ -20,7 +20,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/responses")
 @SecurityRequirement(name = "Bearer Authentication")
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8383"})
+@CrossOrigin(origins = "*")
 public class ResponseController {
 
     private final ResponseService responseService;

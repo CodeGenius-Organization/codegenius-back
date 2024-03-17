@@ -27,7 +27,7 @@
     @RestController
     @RequestMapping("/users")
     @RequiredArgsConstructor
-    @CrossOrigin(origins = {"http://localhost:3000","http://localhost:8181"})
+    @CrossOrigin(origins = "*")
     public class UserController {
         private final UserService userService;
         private final HeartController heartController;

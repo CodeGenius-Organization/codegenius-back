@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @SecurityRequirement(name = "Bearer Authentication")
-@CrossOrigin(origins = {"http://localhost:3000","http://localhost:8181"})
+@CrossOrigin(origins = "*")
 @RequestMapping("/test-attempts")
 public class LessonTestAttemptController {
     @Autowired

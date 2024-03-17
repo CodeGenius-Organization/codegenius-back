@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2023-08-09
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:3000","http://localhost:8181"})
+@CrossOrigin(origins = "*")
 public class AuthentificationController {
     @Autowired
     private AuthenticationManager manager;

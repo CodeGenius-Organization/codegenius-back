@@ -25,7 +25,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/hearts")
 @SecurityRequirement(name = "Bearer Authentication")
-@CrossOrigin(origins = {"http://localhost:3000","http://localhost:8181"})
+@CrossOrigin(origins = "*")
 public class HeartController {
     private final HeartService heartService;
 
