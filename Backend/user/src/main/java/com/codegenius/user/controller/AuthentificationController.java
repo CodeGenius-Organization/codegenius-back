@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
  * @since 2023-08-09
  */
 @RestController
-@CrossOrigin(origins = "*")
 public class AuthentificationController {
     @Autowired
     private AuthenticationManager manager;
