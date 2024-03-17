@@ -19,10 +19,8 @@ import java.util.UUID;
 public class DadosFeedbackCourse {
     @DecimalMax(value = "5.0")
     @DecimalMin(value = "0.0")
-    private Double stars;
+    private Double feedback;
     private String feedbackDescription;
-    @NotNull
-    private Date feedbackDate;
     @NotNull
     private UUID courseFk;
     @NotNull

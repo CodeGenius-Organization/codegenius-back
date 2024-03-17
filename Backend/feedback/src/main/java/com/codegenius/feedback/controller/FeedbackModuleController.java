@@ -1,13 +1,12 @@
 package com.codegenius.feedback.controller;
 
+import com.codegenius.feedback.domain.dto.DadosFeedbackModule;
 import com.codegenius.feedback.domain.dto.DadosFeedbackModuleCompleto;
 import com.codegenius.feedback.domain.service.FeedbackModuleService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +23,13 @@ public class FeedbackModuleController {
     }
 
     @GetMapping("/{moduleId}")
-    public List<DadosFeedbackModuleCompleto> getFeedbacksByModuleId(@PathVariable("moduleId") UUID moduleId) {
-        return feedbackService.findAllByModuleFk(moduleId);
+    public ResponseEntity<List<DadosFeedbackModuleCompleto>> getFeedbacksByModuleId(@PathVariable("moduleId") UUID moduleId) {
+        List<DadosFeedbackModuleCompleto> list = feedbackService.findAllByModuleFk(moduleId);
+        return list.isEmpty() ? ResponseEntity.status(204).build() : ResponseEntity.status(200).body(list);
+    }
+
+    @PostMapping("/save")
+    public DadosFeedbackModuleCompleto saveFeedback(@RequestBody DadosFeedbackModule dadosFeedbackModule) {
+        return feedbackService.saveFeedback(dadosFeedbackModule);
     }
 }

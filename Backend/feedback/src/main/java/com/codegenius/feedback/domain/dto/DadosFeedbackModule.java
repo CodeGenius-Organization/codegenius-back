@@ -22,8 +22,6 @@ public class DadosFeedbackModule {
     private Double stars;
     private String feedback;
     @NotNull
-    private Date feedbackDate;
-    @NotNull
     private UUID moduleFk;
     @NotNull
     private UUID userFk;
