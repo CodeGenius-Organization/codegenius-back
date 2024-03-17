@@ -21,7 +21,7 @@ public class FeedbackModuleModel {
     @Column(name = "module_feedback_id", length = 16, columnDefinition = "uuid")
     private UUID id;
     @Column(name = "stars", length = 3, nullable = false)
-    private Integer stars;
+    private Double stars;
     @Column(name = "feedback")
     private String feedback;
     @Column(name = "feedback_date", nullable = false)
