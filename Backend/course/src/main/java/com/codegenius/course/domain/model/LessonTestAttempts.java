@@ -25,10 +25,12 @@ public class LessonTestAttempts {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_fk")
     @JsonIgnore
     private UserModel user;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "module_lesson_fk")
     private ModuleLessonModel moduleLesson;
 
     @Column(name = "score")

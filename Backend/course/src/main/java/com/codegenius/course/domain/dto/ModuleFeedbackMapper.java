@@ -13,7 +13,7 @@ public class ModuleFeedbackMapper {
         ModuleFeedback moduleFeedback = new ModuleFeedback();
 
         moduleFeedback.setFeedback(dto.getFeedback());
-        LocalDate feedbackDate = LocalDate.parse(dto.getFeedbackDate(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate feedbackDate = LocalDate.parse(dto.getFeedbackDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         moduleFeedback.setFeedbackDate(feedbackDate);
         moduleFeedback.setUser(user);
         moduleFeedback.setModule(module);

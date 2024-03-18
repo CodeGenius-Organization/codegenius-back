@@ -16,7 +16,6 @@ public interface ModuleLessonRepository extends JpaRepository<ModuleLessonModel,
 
     List<ModuleLessonModel> findAllByModule_Id(UUID id);
 
-
     @Modifying
     @Transactional
     @Query("""

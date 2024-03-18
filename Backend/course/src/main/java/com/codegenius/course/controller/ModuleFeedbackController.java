@@ -17,7 +17,7 @@ public class ModuleFeedbackController {
     @Autowired
     private ModuleFeedbackService service;
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<ModuleFeedback> addFeedback(@RequestBody @Valid ModuleFeedbackCreationDTO data) {
         return ResponseEntity.status(200).body(service.addFeedback(data));
     }
