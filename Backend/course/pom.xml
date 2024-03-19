@@ -9,8 +9,8 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.codegenius</groupId>
-	<artifactId>course</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>api-course</artifactId>
+	<version>teste-ec2-01</version>
 	<name>course</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
