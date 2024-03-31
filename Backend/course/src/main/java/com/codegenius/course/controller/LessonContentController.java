@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @RestController
 @SecurityRequirement(name = "Bearer Authentication")
-@CrossOrigin(origins = {"http://localhost:3000","http://localhost:8181"})
+@CrossOrigin(origins = "*")
 @RequestMapping("/lessons-content")
 public class LessonContentController {
     @Autowired
