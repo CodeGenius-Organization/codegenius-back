@@ -20,7 +20,7 @@ public class FeedbackModuleModel {
     @GeneratedValue(generator = "uuid")
     @Column(name = "module_feedback_id", length = 16, columnDefinition = "uuid")
     private UUID id;
-    @Column(name = "stars", length = 3, nullable = false)
+    @Column(name = "stars", nullable = false)
     private Double stars;
     @Column(name = "feedback")
     private String feedback;

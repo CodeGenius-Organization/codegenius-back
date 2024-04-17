@@ -1,9 +1,6 @@
 package com.codegenius.course.domain.service;
 
-import com.codegenius.course.domain.dto.CourseCreationDTO;
-import com.codegenius.course.domain.dto.CourseCsvDTO;
-import com.codegenius.course.domain.dto.CourseDetailDTO;
-import com.codegenius.course.domain.dto.CourseMapper;
+import com.codegenius.course.domain.dto.*;
 import com.codegenius.course.domain.model.CategoryModel;
 import com.codegenius.course.domain.model.CourseModel;
 import com.codegenius.course.domain.model.LanguageModel;
@@ -13,6 +10,7 @@ import com.codegenius.course.domain.utils.Pilha;
 import com.codegenius.course.infra.exception.GlobalExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -192,5 +190,18 @@ public class CourseService {
         }
 
         return filaCrs;
+    }
+
+    public List<TeacherCourseDTO> getTeacherCourses(UUID teacherId) {
+        List<TeacherCourseDTO> response = new ArrayList<>();
+        List<Map<String, Object>> data = courseRepository.findAllTeacherCourses(teacherId);
+        for (Map<String, Object> item : data) {
+            List<LanguageModel> languages = languageService.findByCourses_Id((UUID.fromString(item.get("courseId").toString())));
+
+            TeacherCourseDTO dto = TeacherCourseMapper.of(item);
+            dto.setLanguages(languages);
+            response.add(dto);
+        }
+        return response;
     }
 }

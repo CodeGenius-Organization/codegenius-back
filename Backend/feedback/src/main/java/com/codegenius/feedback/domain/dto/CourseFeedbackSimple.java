@@ -16,11 +16,8 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DadosFeedbackCourse {
-    private Integer stars;
-    private String feedback;
-    @NotNull
-    private UUID courseFk;
-    @NotNull
-    private UUID userFk;
+public class CourseFeedbackSimple {
+    private UUID id;
+    private Integer rate;
+    private String feedbackDescription;
 }

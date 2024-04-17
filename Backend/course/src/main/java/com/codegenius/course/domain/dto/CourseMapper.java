@@ -25,6 +25,9 @@ public class CourseMapper {
         if (courseCreationDTO.getAvailable() != null)
             course.setAvailable(courseCreationDTO.getAvailable());
 
+        if (courseCreationDTO.getTeacherFk() != null)
+            course.setTeacherFk(courseCreationDTO.getTeacherFk());
+
         if (!languages.isEmpty())
             course.setLanguages(new HashSet<>(languages));
 

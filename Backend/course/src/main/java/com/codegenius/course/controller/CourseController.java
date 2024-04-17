@@ -3,6 +3,7 @@ package com.codegenius.course.controller;
 import com.codegenius.course.domain.dto.CourseCreationDTO;
 import com.codegenius.course.domain.dto.CourseCsvDTO;
 import com.codegenius.course.domain.dto.CourseDetailDTO;
+import com.codegenius.course.domain.dto.TeacherCourseDTO;
 import com.codegenius.course.domain.model.CourseModel;
 import com.codegenius.course.domain.service.CourseService;
 import com.codegenius.course.domain.utils.Fila;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -145,5 +147,10 @@ public class CourseController {
         }
 
         return ResponseEntity.status(400).build();
+    }
+
+    @GetMapping(value = "/teacher/{teacherId}")
+    public ResponseEntity<List<TeacherCourseDTO>> getTeacherCourses(@PathVariable UUID teacherId) {
+        return ResponseEntity.status(200).body(courseService.getTeacherCourses(teacherId));
     }
 }

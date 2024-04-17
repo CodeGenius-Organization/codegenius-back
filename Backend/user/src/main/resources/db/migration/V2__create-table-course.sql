@@ -4,5 +4,6 @@ CREATE TABLE course (
     course_description VARCHAR(100) NOT NULL,
     content_description VARCHAR(100) NOT NULL,
     image MEDIUMBLOB,
-    available BOOLEAN NOT NULL DEFAULT false
+    available BOOLEAN NOT NULL DEFAULT false,
+    teacher_fk BINARY(16)
 );

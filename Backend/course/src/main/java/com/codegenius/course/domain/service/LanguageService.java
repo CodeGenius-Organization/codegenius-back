@@ -52,4 +52,8 @@ public class LanguageService {
         }
         return language.get();
     }
+
+    public List<LanguageModel> findByCourses_Id(UUID courseId) {
+        return languageRepository.findByCourses_Id(courseId);
+    }
 }

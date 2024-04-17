@@ -1,5 +1,6 @@
 package com.codegenius.feedback.controller;
 
+import com.codegenius.feedback.domain.dto.CourseFeedbackSimple;
 import com.codegenius.feedback.domain.dto.DadosFeedbackCourse;
 import com.codegenius.feedback.domain.dto.DadosFeedbackCourseCompleto;
 import com.codegenius.feedback.domain.service.FeedbackCourseService;
@@ -23,8 +24,8 @@ public class FeedbackCourseController {
     }
 
     @GetMapping("/{courseId}")
-    public ResponseEntity<List<DadosFeedbackCourseCompleto>> getFeedbacksByCourseId(@PathVariable("courseId") UUID courseId) {
-        List<DadosFeedbackCourseCompleto> list = feedbackService.findAllByCourseFk(courseId);
+    public ResponseEntity<List<CourseFeedbackSimple>> getFeedbacksByCourseId(@PathVariable("courseId") UUID courseId) {
+        List<CourseFeedbackSimple> list = feedbackService.findAllByCourseFk(courseId);
         return list.isEmpty() ? ResponseEntity.status(204).build() : ResponseEntity.status(200).body(list);
     }
 

@@ -20,12 +20,14 @@ public class FeedbackCourseModel {
     @GeneratedValue(generator = "uuid")
     @Column(name = "course_feedback_id", length = 16, columnDefinition = "uuid")
     private UUID id;
-    @Column(name = "feedback", length = 3, nullable = false)
-    private Double feedback;
-    @Column(name = "feedback_description")
-    private String feedbackDescription;
+    @Column(name = "stars", nullable = false)
+    private Integer stars;
+    @Column(name = "feedback")
+    private String feedback;
     @Column(name = "feedback_date", nullable = false)
     private Date feedbackDate;
+    @Column(name = "is_read", nullable = false)
+    private boolean isRead;
     @Column(name = "course_fk", nullable = false)
     private UUID courseFk;
     @Column(name = "user_fk", nullable = false)

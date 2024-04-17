@@ -52,6 +52,9 @@ public class CourseModel {
     @NotNull
     private Boolean available;
 
+    @Column(name = "teacher_fk")
+    private UUID teacherFk;
+
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE

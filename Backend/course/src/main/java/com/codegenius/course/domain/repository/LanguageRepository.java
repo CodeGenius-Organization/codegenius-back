@@ -13,4 +13,6 @@ public interface LanguageRepository extends JpaRepository<LanguageModel, UUID> {
 
     List<LanguageModel> findLanguageByIdIn(List<UUID> ids);
     Optional<LanguageModel> findLanguageByLanguage(String name);
+
+    List<LanguageModel> findByCourses_Id(UUID courseId);
 }

@@ -1,9 +1,6 @@
 package com.codegenius.feedback.domain.service;
 
-import com.codegenius.feedback.domain.dto.DadosFeedbackCourse;
-import com.codegenius.feedback.domain.dto.DadosFeedbackCourseCompleto;
-import com.codegenius.feedback.domain.dto.DadosFeedbackModule;
-import com.codegenius.feedback.domain.dto.DadosFeedbackModuleCompleto;
+import com.codegenius.feedback.domain.dto.*;
 import com.codegenius.feedback.domain.model.FeedbackCourseModel;
 import com.codegenius.feedback.domain.model.FeedbackModuleModel;
 import com.codegenius.feedback.domain.repository.FeedbackCourseRepository;
@@ -26,18 +23,26 @@ public class FeedbackCourseService {
         this.feedbackRepository = feedbackRepository;
     }
 
-    public List<DadosFeedbackCourseCompleto> findAllByCourseFk(UUID courseFk) {
-        List<FeedbackCourseModel> feedbackList = feedbackRepository.findAllByCourseFk(courseFk);
+    public List<CourseFeedbackSimple> findAllByCourseFk(UUID courseFk) {
+        List<FeedbackCourseModel> feedbackList = feedbackRepository.findAllByCourseFkOrderByStarsAsc(courseFk);
         return feedbackList.stream()
-                .map(this::mapToDadosFeedbackCourseCompleto)
+                .map(this::mapToCourseFeedbackSimple)
                 .collect(Collectors.toList());
+    }
+
+    private CourseFeedbackSimple mapToCourseFeedbackSimple(FeedbackCourseModel feedback) {
+        CourseFeedbackSimple dto = new CourseFeedbackSimple();
+        dto.setId(feedback.getId());
+        dto.setRate(feedback.getStars());
+        dto.setFeedbackDescription(feedback.getFeedback());
+        return dto;
     }
 
     private DadosFeedbackCourseCompleto mapToDadosFeedbackCourseCompleto(FeedbackCourseModel feedback) {
         DadosFeedbackCourseCompleto dto = new DadosFeedbackCourseCompleto();
         dto.setId(feedback.getId());
+        dto.setStars(feedback.getStars());
         dto.setFeedback(feedback.getFeedback());
-        dto.setFeedbackDescription(feedback.getFeedbackDescription());
         dto.setFeedbackDate(feedback.getFeedbackDate());
         dto.setCourseFk(feedback.getCourseFk());
         dto.setUserFk(feedback.getUserFk());
@@ -46,8 +51,8 @@ public class FeedbackCourseService {
 
     public DadosFeedbackCourseCompleto saveFeedback(DadosFeedbackCourse dadosFeedbackCourse) {
         FeedbackCourseModel feedbackModel = new FeedbackCourseModel();
+        feedbackModel.setStars(dadosFeedbackCourse.getStars());
         feedbackModel.setFeedback(dadosFeedbackCourse.getFeedback());
-        feedbackModel.setFeedbackDescription(dadosFeedbackCourse.getFeedbackDescription());
         LocalDate localDate = LocalDate.now();
         Date feedbackDate = Date.valueOf(localDate);
         feedbackModel.setFeedbackDate(feedbackDate);
@@ -58,8 +63,8 @@ public class FeedbackCourseService {
 
         DadosFeedbackCourseCompleto completo = new DadosFeedbackCourseCompleto();
         completo.setId(savedFeedback.getId());
+        completo.setStars(savedFeedback.getStars());
         completo.setFeedback(savedFeedback.getFeedback());
-        completo.setFeedbackDescription(savedFeedback.getFeedbackDescription());
         completo.setFeedbackDate(savedFeedback.getFeedbackDate());
         completo.setCourseFk(savedFeedback.getCourseFk());
         completo.setUserFk(savedFeedback.getUserFk());

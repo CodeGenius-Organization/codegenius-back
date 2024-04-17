@@ -16,8 +16,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class DadosFeedbackCourseCompleto {
     private UUID id;
-    private Double feedback;
-    private String feedbackDescription;
+    private Integer stars;
+    private String feedback;
     private Date feedbackDate;
     private UUID courseFk;
     private UUID userFk;

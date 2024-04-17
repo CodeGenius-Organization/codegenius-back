@@ -1,14 +1,17 @@
 package com.codegenius.course.domain.repository;
 
 import com.codegenius.course.domain.dto.CourseCsvDTO;
+import com.codegenius.course.domain.dto.TeacherCourseDTO;
 import com.codegenius.course.domain.model.CourseModel;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -70,4 +73,21 @@ public interface CourseRepository extends JpaRepository<CourseModel, UUID> {
             """)
     //WHEN ?2 = 'STAR' THEN ordenar por avaliacao de curso
     List<CourseModel> findByCategories_Category_OrderBy(@Param("categoryName") String categoryName, @Param("ordering") String ordering, @Param("position") Integer position);
+
+    @Query(value =
+            """
+            SELECT
+                BIN_TO_UUID(c.course_id) courseId,
+                c.title title,
+                c.course_description description,
+                COALESCE(COUNT(CASE WHEN cf.is_read = 0 THEN 1 ELSE NULL END), 0) AS unreadFeedbacks,
+                COALESCE(COUNT(CASE WHEN cf.is_read = 0 AND cf.stars <= 2 THEN 1 ELSE NULL END), 0) AS unreadNegativeFeedbacks 
+            FROM course c
+            LEFT JOIN course_feedback cf
+                ON cf.course_fk = c.course_id
+            WHERE c.teacher_fk = :teacherId
+            GROUP BY c.course_id
+            ORDER BY unreadFeedbacks DESC;
+            """, nativeQuery = true)
+    List<Map<String, Object>> findAllTeacherCourses(@Param("teacherId") UUID teacherId);
 }
