@@ -1,5 +1,5 @@
 USE codegenius;
-
+DESC course;
 INSERT INTO category (category_id, category) VALUES
 (UUID_TO_BIN(UUID()), 'Backend'),
 (UUID_TO_BIN(UUID()), 'Mobile'),
@@ -32,6 +32,9 @@ BEGIN
     DECLARE languageFk BINARY(16);
     DECLARE categoryFk BINARY(16);
     DECLARE moduleFk BINARY(16);
+    DECLARE moduleLessonFk BINARY(16);
+    DECLARE lessonContentFk BINARY(16);
+    DECLARE questionFk BINARY(16);
     
     -- Loop para inserir dados nas tabelas associativas
     WHILE c < 5 DO
@@ -47,24 +50,157 @@ BEGIN
         INSERT INTO course_categories (course_fk, category_fk) VALUES
         (courseFk, categoryFk);
 
-        INSERT INTO course_module (course_module_id, module_name, module_order, course_fk) VALUES
-        (UUID_TO_BIN(UUID()), 'Variáveis', 1, courseFk),
-        (UUID_TO_BIN(UUID()), 'Funções', 2, courseFk),
-        (UUID_TO_BIN(UUID()), 'Classes', 3, courseFk);
-
         SET c = c + 1;
     END WHILE;
 
-    SET c = 0;
+	SELECT course_id
+    INTO courseFk
+    FROM course
+    WHERE title = 'Básicos Java';
 
-    WHILE c < 3 DO
-        SELECT course_module_id INTO moduleFk FROM course_module LIMIT 1 OFFSET c;
+	INSERT INTO course_module (course_module_id, module_name, module_order, course_fk) VALUES
+	(UUID_TO_BIN(UUID()), 'Variáveis', 1, courseFk),
+	(UUID_TO_BIN(UUID()), 'Funções', 2, courseFk),
+	(UUID_TO_BIN(UUID()), 'Classes', 3, courseFk);
+	-- --------------------------------------------------------------------------------------------------------------------
+	/* INSERT DAS LIÇÕES PARA MÓDULOS COM NOME X */
+	SELECT A.course_module_id
+	INTO moduleFk 
+	FROM course_module A
+	JOIN course B
+		ON B.course_id = A.course_fk
+	WHERE A.course_fk = courseFk
+    AND A.module_name = 'Variáveis'
+	LIMIT 1;
 
-        INSERT INTO module_lesson (module_lesson_id, lesson_title, lesson_order, content_description, course_module_fk) VALUES
-        (UUID_TO_BIN(UUID()), CONCAT('Lição ', c2 + 1, ' teste'), (c2 + 1), 'Teste descrição de conteúdo', moduleFk);
+	INSERT INTO module_lesson (module_lesson_id, lesson_title, lesson_order, content_description, course_module_fk) VALUES
+	(UUID_TO_BIN(UUID()), CONCAT('Lição ', 1, ' teste'), 1, 'Teste descrição de conteúdo', moduleFk);
+    
+    SELECT A.course_module_id
+	INTO moduleFk 
+	FROM course_module A
+	JOIN course B
+		ON B.course_id = A.course_fk
+	WHERE A.course_fk = courseFk
+    AND A.module_name = 'Funções'
+	LIMIT 1;
+    
+	INSERT INTO module_lesson (module_lesson_id, lesson_title, lesson_order, content_description, course_module_fk) VALUES
+	(UUID_TO_BIN(UUID()), CONCAT('Lição ', 1, ' teste'), 1, 'Teste descrição de conteúdo', moduleFk);
 
-        SET c = c + 1;
-    END WHILE;
+	SELECT A.course_module_id
+	INTO moduleFk 
+	FROM course_module A
+	JOIN course B
+		ON B.course_id = A.course_fk
+	WHERE A.course_fk = courseFk
+    AND A.module_name = 'Classes'
+	LIMIT 1;
+    
+	INSERT INTO module_lesson (module_lesson_id, lesson_title, lesson_order, content_description, course_module_fk) VALUES
+	(UUID_TO_BIN(UUID()), CONCAT('Lição ', 1, ' teste'), 1, 'Teste descrição de conteúdo', moduleFk);
+	/* INSERT DAS LIÇÕES PARA MÓDULOS COM NOME X */
+	-- ------------------------------------------------------------------------------------------------
+	/* INSERT DO CONTEÚDO DA LIÇÃO, QUESTÕES E RESPOSTAS PRA UMA LIÇÃO DE MÓDULO COM NOME X */
+    SELECT module_lesson_id
+	INTO moduleLessonFk 
+    FROM module_lesson A 
+    JOIN course_module B
+		ON B.course_module_id = A.course_module_fk
+	WHERE b.course_fk = courseFk
+    AND B.module_name = 'Variáveis'
+    LIMIT 1;
+        
+    INSERT INTO lesson_content (lesson_content_id, title, content, module_lesson_fk) VALUES
+    (UUID_TO_BIN(UUID()), 'Título da lição', 'Conteúdo da lição', moduleLessonFk);
+    
+    SELECT lesson_content_id INTO lessonContentFk FROM lesson_content LIMIT 1;
+    
+    INSERT INTO question (id_question, question_type, statement, test_question, lesson_content_fk) VALUES
+    (UUID_TO_BIN(UUID()), 'Alternativa', 'Enunciado de uma pergunta 1', 1, lessonContentFk),
+    (UUID_TO_BIN(UUID()), 'Alternativa', 'Enunciado de uma pergunta 2', 1, lessonContentFk),
+    (UUID_TO_BIN(UUID()), 'Alternativa', 'Enunciado de uma pergunta 3', 1, lessonContentFk),
+    (UUID_TO_BIN(UUID()), 'Alternativa', 'Enunciado de uma pergunta 4', 1, lessonContentFk),
+    (UUID_TO_BIN(UUID()), 'Alternativa', 'Enunciado de uma pergunta 5', 1, lessonContentFk);
+    
+    SELECT
+		id_question
+	INTO questionFk
+    FROM question
+    LIMIT 1;
+    
+    INSERT INTO response (id_response, answer, correct, explanation, fk_question) VALUES
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 1, 'Resposta correta 1', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 2', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 3', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 4', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 5', questionFk);
+
+	SELECT
+		id_question
+	INTO questionFk
+    FROM question
+    LIMIT 1 OFFSET 1;
+    
+    INSERT INTO response (id_response, answer, correct, explanation, fk_question) VALUES
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 1, 'Resposta correta 1', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 2', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 3', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 4', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 5', questionFk);
+
+	SELECT
+		id_question
+	INTO questionFk
+    FROM question
+    LIMIT 1 OFFSET 2;
+    
+    INSERT INTO response (id_response, answer, correct, explanation, fk_question) VALUES
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 1, 'Resposta correta 1', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 2', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 3', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 4', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 5', questionFk);
+    
+    SELECT
+		id_question
+	INTO questionFk
+    FROM question
+    LIMIT 1 OFFSET 3;
+    
+    INSERT INTO response (id_response, answer, correct, explanation, fk_question) VALUES
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 1, 'Resposta correta 1', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 2', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 3', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 4', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 5', questionFk);
+    
+    SELECT
+		id_question
+	INTO questionFk
+    FROM question
+    LIMIT 1 OFFSET 4;
+    
+    INSERT INTO response (id_response, answer, correct, explanation, fk_question) VALUES
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 1, 'Resposta correta 1', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 2', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 3', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 4', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 5', questionFk);
+
+	SELECT
+		id_question
+	INTO questionFk
+    FROM question
+    LIMIT 1 OFFSET 5;
+    
+    INSERT INTO response (id_response, answer, correct, explanation, fk_question) VALUES
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 1, 'Resposta correta 1', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 2', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 3', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 4', questionFk),
+	(UUID_TO_BIN(UUID()), 'Resposta 1', 0, 'Resposta correta 5', questionFk);
+    
 END $$
 DELIMITER ;
 
