@@ -1,6 +1,0 @@
-2023-10-07 19:07:33 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USER_HEATS" not found (this database is empty); SQL statement:
-insert into user_heats (fk_user, hearts, last_update, id_hearts) values (?, ?, ?, ?) [42104-214]
-2023-10-07 19:09:43 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USER_HEARTS" not found (this database is empty); SQL statement:
-insert into user_hearts (fk_user, hearts, last_update, id_hearts) values (?, ?, ?, ?) [42104-214]

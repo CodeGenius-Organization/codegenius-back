@@ -1,5 +1,0 @@
-00TXT0012023-12-03 15:30:0029
-03Alternativa    Qual elemento mostra corretamente o x da x???Sim   Fácil
-03Alternativa    Qual elemento mostra corretamente o y da y???Não   Fácil
-03Alternativa    Qual elemento mostra corretamente o z da z???Sim Difícil
-01TotalQuestions001
