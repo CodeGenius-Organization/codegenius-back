@@ -57,5 +57,6 @@ jobs:
       - name: Push original Docker Image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/user:latest
 
+
       - name: Push new Docker Image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/new-image:latest
