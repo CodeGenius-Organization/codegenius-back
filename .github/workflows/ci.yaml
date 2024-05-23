@@ -49,13 +49,13 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker Image
-        run: docker build . -t ${{ secrets.DOCKER_USERNAME }}/user:${{ github.sha }}
+        run: docker build . -t ${{ secrets.DOCKER_USERNAME }}/user:latest
 
       - name: Tag Docker Image with new name
-        run: docker tag ${{ secrets.DOCKER_USERNAME }}/user:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/new-image:${{ github.sha }}
+        run: docker tag ${{ secrets.DOCKER_USERNAME }}/user:latest ${{ secrets.DOCKER_USERNAME }}/new-image:latest
 
       - name: Push original Docker Image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/user:${{ github.sha }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/user:latest
 
       - name: Push new Docker Image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/new-image:${{ github.sha }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/new-image:latest
