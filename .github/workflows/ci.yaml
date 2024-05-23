@@ -51,7 +51,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker Image
-        run: docker build . -t ${{ secrets.DOCKER_USERNAME }}/my-spring-boot-app:${{ github.sha }}
+        run: docker build . -t ${{ secrets.DOCKER_USERNAME }}/user:${{ github.sha }}
 
       - name: Push Docker Image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/my-spring-boot-app:${{ github.sha }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/user:${{ github.sha }}
