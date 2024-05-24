@@ -10,11 +10,11 @@ on:
       - main
       - feature/**
 
-      jobs:
-       deploy:
-       runs-on: self-hosted
-       steps:
-          - name: Pull docker image
-            run: docker pull paulamariapires/user:latest
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Pull docker image
+        run: docker pull paulamariapires/user:latest
 
       
