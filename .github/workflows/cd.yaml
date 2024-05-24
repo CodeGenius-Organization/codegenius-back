@@ -4,9 +4,6 @@ on:
   push:
     branches: 
       - main
-  pull_request:
-    branches: 
-      - main
 
 jobs:
   deploy:
@@ -14,5 +11,3 @@ jobs:
     steps:
       - name: Pull docker image
         run: docker pull paulamariapires/user:latest
-
-      
