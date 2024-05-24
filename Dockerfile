@@ -1,6 +1,6 @@
 FROM maven:3-openjdk-17 as builder
 
-LABEL authors="Codegenius"
+LABEL authors="Codegenius 1.0"
 
 WORKDIR /build 
 
