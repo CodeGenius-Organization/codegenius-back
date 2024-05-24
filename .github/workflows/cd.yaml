@@ -3,7 +3,7 @@ name: CD github runner
 on:
   push:
     branches: 
-      - main
+      - feature/**
 
 jobs:
   deploy:
