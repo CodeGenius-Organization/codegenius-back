@@ -9,5 +9,5 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - name: Pull docker image for docker-compose.yaml
+      - name: Pull docker image for docker-compose.yaml .
         run: docker pull paulamariapires/user:latest
