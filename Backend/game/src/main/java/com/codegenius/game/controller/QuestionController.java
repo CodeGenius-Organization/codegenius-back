@@ -30,7 +30,7 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    @PostMapping
+    @PostMapping("/")
     @Operation(summary = "Create a new question", description = "Endpoint to create a new question with provided details.")
     @ApiResponse(responseCode = "201", description = "Question created", content = @Content(mediaType = "application/json", schema = @Schema(implementation = DadosQuestoesCompleto.class)))
     public ResponseEntity<DadosQuestoesCompleto> createQuestion (
